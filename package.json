@@ -1,0 +1,72 @@
+{
+  "name": "@phnq/tooltip",
+  "version": "1.0.0",
+  "description": "Tooltips for React",
+  "main": "index.js",
+  "module": "index.es.js",
+  "jsnext:main": "index.es.js",
+  "scripts": {
+    "preinstall": "scripts/preinstall.sh",
+    "postdist": "rimraf dist/__tests__; ts-node --project scripts/tsconfig.json scripts/postdist",
+    "dist": "rollup -c rollup.ts",
+    "clean": "rimraf dist",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook",
+    "release:patch": "npm version patch; npm run dist; cd dist; npm publish",
+    "release:minor": "npm version minor; npm run dist; cd dist; npm publish"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pgostovic/tooltip.git"
+  },
+  "keywords": [
+    "react",
+    "tooltip",
+    "tooltips",
+    "phnq"
+  ],
+  "author": "Patrick Gostovic",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pgostovic/tooltip/issues"
+  },
+  "homepage": "https://github.com/pgostovic/tooltip#readme",
+  "peerDependencies": {
+    "react": "^16.13.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@storybook/preset-typescript": "^2.1.0",
+    "@storybook/react": "^5.3.17",
+    "@types/faker": "^4.1.10",
+    "@types/node": "^13.9.3",
+    "@types/react": "^16.9.25",
+    "@types/react-dom": "^16.9.5",
+    "@types/rollup-plugin-peer-deps-external": "^2.2.0",
+    "@typescript-eslint/eslint-plugin": "^2.24.0",
+    "@typescript-eslint/parser": "^2.24.0",
+    "babel-loader": "^8.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.1",
+    "eslint-plugin-prettier": "^3.1.2",
+    "eslint-plugin-react": "^7.19.0",
+    "eslint-plugin-simple-import-sort": "^5.0.2",
+    "faker": "^4.1.0",
+    "fork-ts-checker-webpack-plugin": "^4.1.1",
+    "prettier": "^1.19.1",
+    "react-dom": "^16.13.1",
+    "rimraf": "^3.0.2",
+    "rollup": "^2.2.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-peer-deps-external": "^2.2.2",
+    "rollup-plugin-typescript2": "^0.27.0",
+    "ts-loader": "^6.2.2",
+    "ts-node": "^8.8.1",
+    "typescript": "^3.8.3"
+  },
+  "dependencies": {
+    "@types/styled-components": "^5.1.0",
+    "styled-components": "^5.1.0"
+  }
+}
