@@ -88,11 +88,14 @@ export const Basic: FC = () => (
       Integer in lacinia elit. Sed porta tempus leo, quis tempor enim pellentesque vel. Quisque
       finibus euismod pellentesque. Suspendisse ullamcorper eros justo, eget vulputate ex ultrices
       sit amet. Aliquam facilisis sem a sapien gravida semper. Suspendisse finibus quam ligula, at
-      pretium mi eleifend ac. Duis <TT tip={POTATOES}>eleifend</TT> blandit vestibulum. Suspendisse
-      ut erat nec purus facilisis convallis eu quis erat. Etiam ut diam a dui dignissim tempus et
-      sit amet velit. Donec nec tortor ac nisi sodales sodales. Vivamus auctor orci nulla, in semper
-      elit aliquet non. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam id aliquet
-      felis, ac egestas lacus.
+      pretium mi eleifend ac. Duis{' '}
+      <TT tip={POTATOES} interactable>
+        eleifend
+      </TT>{' '}
+      blandit vestibulum. Suspendisse ut erat nec purus facilisis convallis eu quis erat. Etiam ut
+      diam a dui dignissim tempus et sit amet velit. Donec nec tortor ac nisi sodales sodales.
+      Vivamus auctor orci nulla, in semper elit aliquet non. Lorem ipsum dolor sit amet, consectetur
+      adipiscing elit. Nullam id aliquet felis, ac egestas lacus.
     </P>
     <P>
       Cras quis diam massa. Donec vel risus elit. Morbi ut erat nec orci pulvinar tincidunt non a
@@ -106,8 +109,5 @@ export const Basic: FC = () => (
 );
 
 const LONG_TIP = `Cras quis diam massa. Donec vel risus elit. Morbi ut erat nec orci pulvinar tincidunt non a
-sapien. Sed nec convallis felis. In nisi odio, iaculis vitae risus sit amet, lobortis iaculis
-purus. Etiam dui lorem, aliquam in erat sit amet, ultrices venenatis nibh. Donec laoreet velit
 ac tortor rutrum consequat. Curabitur ultricies vitae sapien vel condimentum. Morbi blandit
-euismod lacus vel tempor. Aliquam at turpis placerat, condimentum lacus non, rhoncus metus.
 Donec tincidunt nunc augue, vel congue felis dictum eu. Mauris vel laoreet nisi.`;

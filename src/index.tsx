@@ -18,6 +18,7 @@ const ANIM_TIME = 150;
 const MIN_SCALE = 0.8;
 const BG_COLORS = ['#eee', '#fff', '#eee'];
 const BOUNDS_PADDING = 15;
+const DEFAULT_MAX_WIDTH = 300;
 
 type TipLocation = 'top' | 'right' | 'bottom' | 'left';
 
@@ -64,11 +65,11 @@ interface TipProps {
   offset: number;
   width: number;
   tipLocation: TipLocation;
-  multiline: boolean;
+  interactable: boolean;
 }
 
 const Tip = styled.span<TipProps>`
-  pointer-events: ${({ multiline }) => (multiline ? 'initial' : 'none')};
+  pointer-events: ${({ interactable }) => (interactable ? 'initial' : 'none')};
   position: fixed;
   z-index: 10;
   width: ${({ width }) => (width ? `${width}px` : 'auto')};
@@ -176,6 +177,7 @@ interface Props {
   tip: ReactNode;
   location?: TipLocation;
   maxWidth?: number;
+  interactable?: boolean;
 }
 
 const Tooltip: FC<Props> = ({
@@ -184,7 +186,8 @@ const Tooltip: FC<Props> = ({
   style,
   tip,
   location = 'top',
-  maxWidth = 300,
+  maxWidth = DEFAULT_MAX_WIDTH,
+  interactable = false,
 }) => {
   const ref = createRef<HTMLSpanElement>();
   const tipRef = createRef<HTMLSpanElement>();
@@ -320,7 +323,7 @@ const Tooltip: FC<Props> = ({
           className={tipState === TipState.Hiding ? 'out' : undefined}
           offset={offset}
           width={multiline ? maxWidth : 0}
-          multiline={multiline}
+          interactable={interactable}
           tipLocation={tipLocation}
         >
           <Content>{tip}</Content>
