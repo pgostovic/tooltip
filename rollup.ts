@@ -31,4 +31,5 @@ export default {
       include: ['node_modules/**'],
     }),
   ],
+  external: ['styled-components'],
 };
