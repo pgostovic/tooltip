@@ -1,4 +1,5 @@
 import React, {
+  ComponentType,
   createRef,
   CSSProperties,
   FC,
@@ -10,9 +11,10 @@ import React, {
 } from 'react';
 import styled, { keyframes } from 'styled-components';
 
-const Root = styled.span`
+const Root = styled.span<{ clickable: boolean }>`
   position: relative;
   display: inline-block;
+  cursor: ${({ clickable }) => (clickable ? 'pointer' : 'auto')};
 `;
 
 const ANIM_TIME = 150;
@@ -71,6 +73,7 @@ interface TipProps {
 
 const Tip = styled.span<TipProps>`
   pointer-events: ${({ interactable }) => (interactable ? 'initial' : 'none')};
+  cursor: auto;
   position: fixed;
   z-index: 10;
   width: ${({ width }) => (width ? `${width}px` : 'auto')};
@@ -175,7 +178,7 @@ enum TipState {
 interface Props {
   className?: string;
   style?: CSSProperties;
-  tip: ReactNode;
+  tip: ReactNode | ComponentType<{ onHide(): void }>;
   location?: TipLocation;
   maxWidth?: number;
   interactable?: boolean;
@@ -200,6 +203,8 @@ const Tooltip: FC<Props> = ({
   const [offset, setOffset] = useState(0);
   const [tipState, setTipState] = useState(TipState.Hidden);
   const [tipLocation, setTipLocation] = useState<TipLocation>(location);
+
+  const TipComponent = typeof tip === 'function' ? tip : undefined;
 
   useLayoutEffect(() => {
     if (ref.current && tipRef.current && tipState === TipState.Visible) {
@@ -284,6 +289,12 @@ const Tooltip: FC<Props> = ({
 
   // TODO: if children is an element then don't wrap it, just attach the event handlers to it.
 
+  const escapeHandler = useCallback(({ keyCode }: KeyboardEvent) => {
+    if (keyCode === 27) {
+      hideTip();
+    }
+  }, []);
+
   const showTip = useCallback(() => {
     pushTip(ref.current);
     scrolledRef.current = false;
@@ -291,6 +302,7 @@ const Tooltip: FC<Props> = ({
     setOffset(0);
     setTipLocation(location);
     setTipState(TipState.Visible);
+    window.addEventListener('keydown', escapeHandler);
   }, [location]);
 
   const hideTip = useCallback(() => {
@@ -300,6 +312,7 @@ const Tooltip: FC<Props> = ({
       popTip(rootElmnt);
     }, ANIM_TIME);
     setTipState(t => (t === TipState.Visible ? TipState.Hiding : t));
+    window.removeEventListener('keydown', escapeHandler);
   }, []);
 
   return (
@@ -307,6 +320,7 @@ const Tooltip: FC<Props> = ({
       ref={ref}
       className={className}
       style={style}
+      clickable={clickToShow}
       onClick={
         clickToShow
           ? ({ target, currentTarget }) => {
@@ -345,7 +359,13 @@ const Tooltip: FC<Props> = ({
           interactable={interactable}
           tipLocation={tipLocation}
         >
-          <Content>{tip}</Content>
+          {TipComponent === undefined ? (
+            <Content>{tip}</Content>
+          ) : (
+            <Content>
+              <TipComponent onHide={hideTip} />
+            </Content>
+          )}
           <Arrow tipLocation={tipLocation} offset={offset} />
         </Tip>
       )}
