@@ -3,6 +3,7 @@ import React, {
   CSSProperties,
   FC,
   ReactNode,
+  useCallback,
   useLayoutEffect,
   useRef,
   useState,
@@ -178,6 +179,7 @@ interface Props {
   location?: TipLocation;
   maxWidth?: number;
   interactable?: boolean;
+  clickToShow?: boolean;
 }
 
 const Tooltip: FC<Props> = ({
@@ -188,6 +190,7 @@ const Tooltip: FC<Props> = ({
   location = 'top',
   maxWidth = DEFAULT_MAX_WIDTH,
   interactable = false,
+  clickToShow = false,
 }) => {
   const ref = createRef<HTMLSpanElement>();
   const tipRef = createRef<HTMLSpanElement>();
@@ -281,38 +284,54 @@ const Tooltip: FC<Props> = ({
 
   // TODO: if children is an element then don't wrap it, just attach the event handlers to it.
 
+  const showTip = useCallback(() => {
+    pushTip(ref.current);
+    scrolledRef.current = false;
+    setMultiline(false);
+    setOffset(0);
+    setTipLocation(location);
+    setTipState(TipState.Visible);
+  }, [location]);
+
+  const hideTip = useCallback(() => {
+    const rootElmnt = ref.current;
+    setTimeout(() => {
+      setTipState(t => (t === TipState.Hiding ? TipState.Hidden : t));
+      popTip(rootElmnt);
+    }, ANIM_TIME);
+    setTipState(t => (t === TipState.Visible ? TipState.Hiding : t));
+  }, []);
+
   return (
     <Root
       ref={ref}
       className={className}
       style={style}
-      onMouseEnter={({ target }) => {
-        if (target !== tipRef.current) {
-          pushTip(ref.current);
-          scrolledRef.current = false;
-          setMultiline(false);
-          setOffset(0);
-          setTipLocation(location);
-          setTipState(TipState.Visible);
-        }
-      }}
+      onClick={
+        clickToShow
+          ? ({ target, currentTarget }) => {
+              if (target === currentTarget) {
+                showTip();
+              }
+            }
+          : undefined
+      }
+      onMouseEnter={
+        clickToShow
+          ? undefined
+          : ({ target }) => {
+              if (target !== tipRef.current) {
+                showTip();
+              }
+            }
+      }
       onMouseLeave={() => {
-        const rootElmnt = ref.current;
-        setTimeout(() => {
-          setTipState(t => (t === TipState.Hiding ? TipState.Hidden : t));
-          popTip(rootElmnt);
-        }, ANIM_TIME);
-        setTipState(t => (t === TipState.Visible ? TipState.Hiding : t));
+        hideTip();
       }}
       onWheel={({ target, deltaY }) => {
         if (target === ref.current && deltaY !== 0 && !scrolledRef.current) {
-          const rootElmnt = ref.current;
           scrolledRef.current = true;
-          setTimeout(() => {
-            setTipState(t => (t === TipState.Hiding ? TipState.Hidden : t));
-            popTip(rootElmnt);
-          }, ANIM_TIME);
-          setTipState(t => (t === TipState.Visible ? TipState.Hiding : t));
+          hideTip();
         }
       }}
     >

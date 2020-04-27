@@ -89,7 +89,7 @@ export const Basic: FC = () => (
       finibus euismod pellentesque. Suspendisse ullamcorper eros justo, eget vulputate ex ultrices
       sit amet. Aliquam facilisis sem a sapien gravida semper. Suspendisse finibus quam ligula, at
       pretium mi eleifend ac. Duis{' '}
-      <TT tip={POTATOES} interactable>
+      <TT tip={POTATOES} interactable clickToShow>
         eleifend
       </TT>{' '}
       blandit vestibulum. Suspendisse ut erat nec purus facilisis convallis eu quis erat. Etiam ut
