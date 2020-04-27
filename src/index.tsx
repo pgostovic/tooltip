@@ -296,14 +296,15 @@ const Tooltip: FC<Props> = ({
   }, []);
 
   const showTip = useCallback(() => {
-    pushTip(ref.current);
+    const rootElmnt = ref.current;
+    pushTip(rootElmnt);
     scrolledRef.current = false;
     setMultiline(false);
     setOffset(0);
     setTipLocation(location);
     setTipState(TipState.Visible);
     window.addEventListener('keydown', escapeHandler);
-  }, [location]);
+  }, [ref, location]);
 
   const hideTip = useCallback(() => {
     const rootElmnt = ref.current;
@@ -313,7 +314,7 @@ const Tooltip: FC<Props> = ({
     }, ANIM_TIME);
     setTipState(t => (t === TipState.Visible ? TipState.Hiding : t));
     window.removeEventListener('keydown', escapeHandler);
-  }, []);
+  }, [ref]);
 
   return (
     <Root
@@ -323,8 +324,8 @@ const Tooltip: FC<Props> = ({
       clickable={clickToShow}
       onClick={
         clickToShow
-          ? ({ target, currentTarget }) => {
-              if (target === currentTarget) {
+          ? ({ target }) => {
+              if (target !== tipRef.current) {
                 showTip();
               }
             }
@@ -362,7 +363,11 @@ const Tooltip: FC<Props> = ({
           {TipComponent === undefined ? (
             <Content>{tip}</Content>
           ) : (
-            <Content>
+            <Content
+              onClick={event => {
+                event.stopPropagation();
+              }}
+            >
               <TipComponent onHide={hideTip} />
             </Content>
           )}
