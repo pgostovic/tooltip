@@ -6,7 +6,6 @@
   "module": "index.es.js",
   "jsnext:main": "index.es.js",
   "scripts": {
-    "preinstall": "scripts/preinstall.sh",
     "postdist": "rimraf dist/__tests__; ts-node --project scripts/tsconfig.json scripts/postdist",
     "dist": "rollup -c rollup.ts",
     "clean": "rimraf dist",
